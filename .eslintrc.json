@@ -1,0 +1,43 @@
+{
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "moduleDirectory": ["node_modules", "src/"]
+      }
+    }
+  },
+  "env": {
+    "node": true,
+    "es6": true,
+    "browser": true
+  },
+  "parser": "babel-eslint",
+  "plugins": ["react", "prettier"],
+  "extends": ["airbnb", "prettier", "prettier/react"],
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module",
+    "allowImportExportEverywhere": true,
+    "ecmaFeatures": {
+      "jsx": true,
+      "forOf": true
+    }
+  },
+  "rules": {
+    "semi": [2, "always", { "omitLastInOneLineBlock": true }],
+    "no-unused-vars": 2,
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error",
+    "react/destructuring-assignment": [1, "always"],
+    "react/jsx-filename-extension": [2, { "extensions": [".js"] }],
+    "no-use-before-define": ["error", { "functions": false }],
+    "prettier/prettier": "error",
+    "react/prefer-stateless-function": [0],
+    "react/forbid-prop-types": 0,
+    "no-underscore-dangle": ["error", { "allow": ["_error"] }],
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+    "no-else-return": ["error", { "allowElseIf": true }],
+    "jsx-a11y/label-has-for": 0,
+    "jsx-a11y/label-has-associated-control": 0
+  }
+}

@@ -1,0 +1,9 @@
+.d-block {
+  display: block!important;
+}
+
+@include media-breakpoint-down(sm) {
+  .hidden-mobile {
+    display: none !important;
+  }
+}

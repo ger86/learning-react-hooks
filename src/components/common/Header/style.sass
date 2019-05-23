@@ -1,0 +1,44 @@
+@import "src/sass/basics"
+
+.the-header
+  padding-top: .5rem
+  padding-bottom: .5rem
+  background: $black
+  color: $white
+  a
+    color: $white
+    &:hover
+      color: $white
+      text-transform: underline
+
+  &__wrapper
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+  .header-menu
+    display: flex
+    justify-content: flex-end
+    align-items: center
+    font-size: $font-size-sm
+
+    @include media-breakpoint-up(lg)
+      font-size: $font-size-base
+
+    &__image
+      width: 40px
+
+      img 
+        max-width: 100%
+        height: auto
+
+    &__name
+      display: none
+      @include media-breakpoint-up(lg)
+        display: block
+
+    &__element
+      margin-right: .5rem
+
+      &:last-child
+        margin-right: 0
