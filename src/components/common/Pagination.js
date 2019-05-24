@@ -1,23 +1,14 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-export default class Pagination extends PureComponent {
-  static propTypes = {
-    totalItems: PropTypes.number.isRequired,
-    generateLinkForPage: PropTypes.func.isRequired,
-    pageSize: PropTypes.number,
-    currentPage: PropTypes.number
-  };
-
-  static defaultProps = {
-    currentPage: 1,
-    pageSize: 10
-  };
-
-  getPager() {
-    const { totalItems, pageSize, currentPage } = this.props;
-
+const Pagination = ({
+  totalItems,
+  pageSize,
+  currentPage,
+  generateLinkForPage
+}) => {
+  const getPager = () => {
     // calculate total pages
     const totalPages = Math.ceil(totalItems / pageSize);
 
@@ -59,73 +50,75 @@ export default class Pagination extends PureComponent {
       endIndex,
       pages
     };
+  };
+
+  const pager = getPager();
+
+  if (!pager.pages || pager.pages.length <= 1) {
+    // don't display pager if there is only 1 page
+    return null;
   }
 
-  render() {
-    const { generateLinkForPage } = this.props;
-    const pager = this.getPager();
+  return (
+    <ul className="pagination">
+      <li className={`page-item ${pager.currentPage === 1 ? 'disabled' : ''}`}>
+        <Link className="page-link" to={generateLinkForPage(1)}>
+          Primera
+        </Link>
+      </li>
+      <li className={`page-item ${pager.currentPage === 1 ? 'disabled' : ''}`}>
+        <Link
+          className="page-link"
+          to={generateLinkForPage(pager.currentPage - 1)}
+        >
+          Anterior
+        </Link>
+      </li>
+      {pager.pages.map(page => (
+        <li
+          key={`page-${page}`}
+          className={`page-item ${pager.currentPage === page ? 'active' : ''}`}
+        >
+          <Link className="page-link" to={generateLinkForPage(page)}>
+            {page}
+          </Link>
+        </li>
+      ))}
+      <li
+        className={`page-item ${
+          pager.currentPage === pager.totalPages ? 'disabled' : ''
+        }`}
+      >
+        <Link
+          className="page-link"
+          to={generateLinkForPage(pager.currentPage + 1)}
+        >
+          Siguiente
+        </Link>
+      </li>
+      <li
+        className={`page-item ${
+          pager.currentPage === pager.totalPages ? 'disabled' : ''
+        }`}
+      >
+        <Link className="page-link" to={generateLinkForPage(pager.totalPages)}>
+          Última
+        </Link>
+      </li>
+    </ul>
+  );
+};
 
-    if (!pager.pages || pager.pages.length <= 1) {
-      // don't display pager if there is only 1 page
-      return null;
-    }
+Pagination.propTypes = {
+  totalItems: PropTypes.number.isRequired,
+  generateLinkForPage: PropTypes.func.isRequired,
+  pageSize: PropTypes.number,
+  currentPage: PropTypes.number
+};
 
-    return (
-      <ul className="pagination">
-        <li
-          className={`page-item ${pager.currentPage === 1 ? 'disabled' : ''}`}
-        >
-          <Link className="page-link" to={generateLinkForPage(1)}>
-            Primera
-          </Link>
-        </li>
-        <li
-          className={`page-item ${pager.currentPage === 1 ? 'disabled' : ''}`}
-        >
-          <Link
-            className="page-link"
-            to={generateLinkForPage(pager.currentPage - 1)}
-          >
-            Anterior
-          </Link>
-        </li>
-        {pager.pages.map(page => (
-          <li
-            key={`page-${page}`}
-            className={`page-item ${
-              pager.currentPage === page ? 'active' : ''
-            }`}
-          >
-            <Link className="page-link" to={generateLinkForPage(page)}>
-              {page}
-            </Link>
-          </li>
-        ))}
-        <li
-          className={`page-item ${
-            pager.currentPage === pager.totalPages ? 'disabled' : ''
-          }`}
-        >
-          <Link
-            className="page-link"
-            to={generateLinkForPage(pager.currentPage + 1)}
-          >
-            Siguiente
-          </Link>
-        </li>
-        <li
-          className={`page-item ${
-            pager.currentPage === pager.totalPages ? 'disabled' : ''
-          }`}
-        >
-          <Link
-            className="page-link"
-            to={generateLinkForPage(pager.totalPages)}
-          >
-            Última
-          </Link>
-        </li>
-      </ul>
-    );
-  }
-}
+Pagination.defaultProps = {
+  currentPage: 1,
+  pageSize: 10
+};
+
+export default Pagination;

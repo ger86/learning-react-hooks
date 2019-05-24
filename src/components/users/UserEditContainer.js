@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Alert from 'components/styled/Alert';
@@ -6,63 +6,50 @@ import Loading from 'components/common/Loading';
 import UserFormContainer from 'components/users/UserFormContainer';
 import { getUserThunk, patchUserThunk } from 'ducks/users';
 import { getUserById } from 'ducks/selectors';
+import useApiCall from 'hooks/useApiCall';
 import userPropType from 'prop-types/userPropType';
 
-class UserEditContainer extends PureComponent {
-  static propTypes = {
-    userId: PropTypes.string.isRequired,
-    getUserThunkConnect: PropTypes.func.isRequired,
-    patchUserThunkConnect: PropTypes.func.isRequired,
-    user: userPropType
-  };
+const UserEditContainer = ({
+  userId,
+  getUserThunkConnect,
+  patchUserThunkConnect,
+  user
+}) => {
+  const memoizedCallback = useCallback(() => {
+    getUserThunkConnect(userId);
+  }, [userId, getUserThunkConnect]);
 
-  static defaultProps = {
-    user: null
-  };
+  const { state: apiCallState, apiCall } = useApiCall(memoizedCallback);
+  useEffect(() => {
+    apiCall();
+  }, [userId, apiCall]);
 
-  state = {
-    error: null
-  };
+  const onSubmit = async userData => patchUserThunkConnect(userData);
 
-  async componentDidMount() {
-    this.requestUser();
+  if (apiCallState.error) {
+    return (
+      <Alert error>
+        {apiCallState.error.code === 404
+          ? 'No se encontró el usuario'
+          : apiCallState.error.message}
+      </Alert>
+    );
+  } else if (apiCallState.sending) {
+    return <Loading>Cargando usuario</Loading>;
   }
+  return <UserFormContainer user={user} sendForm={onSubmit} />;
+};
 
-  componentDidUpdate(prevProps) {
-    const { userId } = this.props;
-    if (prevProps.userId !== userId) {
-      this.requestUser();
-    }
-  }
+UserEditContainer.propTypes = {
+  userId: PropTypes.string.isRequired,
+  getUserThunkConnect: PropTypes.func.isRequired,
+  patchUserThunkConnect: PropTypes.func.isRequired,
+  user: userPropType
+};
 
-  requestUser = async () => {
-    const { userId, getUserThunkConnect } = this.props;
-    try {
-      await getUserThunkConnect(userId);
-      this.setState({ error: null });
-    } catch (error) {
-      this.setState({ error });
-    }
-  };
-
-  // eslint-disable-next-line react/destructuring-assignment
-  onSubmit = async user => this.props.patchUserThunkConnect(user);
-
-  render() {
-    const { user } = this.props;
-    const { error } = this.state;
-    if (error) {
-      return (
-        <Alert error>
-          {error.code === 404 ? 'No se encontró el usuario' : error.message}
-        </Alert>
-      );
-    } else if (user === null) {
-      return <Loading>Cargando usuario</Loading>;
-    }
-    return <UserFormContainer user={user} onSubmit={this.onSubmit} />;
-  }
-}
+UserEditContainer.defaultProps = {
+  user: null
+};
 
 export default connect(
   (state, ownProps) => ({

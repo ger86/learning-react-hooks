@@ -8,7 +8,7 @@ const UserCreateContainer = ({ postUserThunkConnect }) => {
   // eslint-disable-next-line react/destructuring-assignment
   const onSubmit = async user => postUserThunkConnect(user);
 
-  return <UserFormContainer onSubmit={onSubmit} />;
+  return <UserFormContainer sendForm={onSubmit} />;
 };
 
 UserCreateContainer.propTypes = {

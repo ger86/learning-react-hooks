@@ -1,60 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import UserForm from 'components/users/UserForm';
+import useApiCall from 'hooks/useApiCall';
 import userPropType from 'prop-types/userPropType';
 
-const UserFormContainer = ({ onSubmit, user }) => {
-  const [sending, setSending] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
-  const [userModel, setUserModel] = useState(
-    user // eslint-disable-next-line react/destructuring-assignment
-      ? { ...user }
-      : { first_name: '', email: '' }
+const initialValues = user =>
+  user ? { ...user } : { first_name: '', email: '' };
+
+const UserFormContainer = ({ sendForm, user }) => {
+  const [userModel, setUserModel] = useState(initialValues(user));
+
+  useEffect(() => {
+    setUserModel(initialValues(user));
+  }, [user]);
+
+  const { state: apiCallState, apiCall } = useApiCall(async () =>
+    sendForm(userModel)
   );
 
-  const onSubmitForm = async event => {
+  const onSubmit = async event => {
     event.preventDefault();
-    setSending(true);
-    try {
-      await onSubmit(userModel);
-      setSending(false);
-      setError(false);
-      setSuccess(true);
-    } catch (exception) {
-      setSending(false);
-      setError(exception);
-      setSuccess(false);
-    }
+    apiCall();
   };
 
   const onChangeName = event => {
-    setUserModel({
-      userModel: { email: userModel.email, first_name: event.target.value }
-    });
+    setUserModel({ email: userModel.email, first_name: event.target.value });
   };
 
   const onChangeEmail = event => {
     setUserModel({
-      userModel: { first_name: userModel.first_name, email: event.target.value }
+      first_name: userModel.first_name,
+      email: event.target.value
     });
   };
-
   return (
     <UserForm
-      success={success}
-      error={error}
-      sending={sending}
+      {...apiCallState}
       userModel={userModel}
       onChangeEmail={onChangeEmail}
       onChangeName={onChangeName}
-      onSubmit={onSubmitForm}
+      onSubmit={onSubmit}
     />
   );
 };
 
 UserFormContainer.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
+  sendForm: PropTypes.func.isRequired,
   user: userPropType
 };
 
