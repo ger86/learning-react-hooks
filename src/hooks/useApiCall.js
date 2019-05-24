@@ -37,7 +37,6 @@ export default function useApiCall(apiCall) {
 
   return {
     state,
-    apiCall: memoizedCallback,
-    dispatch
+    apiCall: memoizedCallback
   };
 }
