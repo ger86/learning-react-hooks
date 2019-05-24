@@ -22,7 +22,7 @@ class Header extends PureComponent {
         <div className="container">
           <div className="the-header__wrapper">
             <div className="header-brand">
-              <Link to={usersRoute()}>Cloud District</Link>
+              <Link to={usersRoute()}>Latte and Code</Link>
             </div>
             {user && (
               <div className="header-menu">
