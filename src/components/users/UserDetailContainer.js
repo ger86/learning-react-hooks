@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import UserDetail from 'components/users/UserDetail';
@@ -8,15 +8,7 @@ import useApiCall from 'hooks/useApiCall';
 import userPropType from 'prop-types/userPropType';
 
 const UserDetailContainer = ({ getUserThunkConnect, user, userId }) => {
-  const memoizedCallback = useCallback(() => {
-    getUserThunkConnect(userId);
-  }, [userId, getUserThunkConnect]);
-
-  const { state: apiCallState, apiCall } = useApiCall(memoizedCallback);
-  useEffect(() => {
-    apiCall();
-  }, [userId, apiCall]);
-
+  const { state: apiCallState } = useApiCall(getUserThunkConnect, [userId]);
   return <UserDetail user={user} state={apiCallState} />;
 };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Alert from 'components/styled/Alert';
@@ -15,14 +15,7 @@ const UserEditContainer = ({
   patchUserThunkConnect,
   user
 }) => {
-  const memoizedCallback = useCallback(() => {
-    getUserThunkConnect(userId);
-  }, [userId, getUserThunkConnect]);
-
-  const { state: apiCallState, apiCall } = useApiCall(memoizedCallback);
-  useEffect(() => {
-    apiCall();
-  }, [userId, apiCall]);
+  const { state: apiCallState } = useApiCall(getUserThunkConnect, [userId]);
 
   const onSubmit = async userData => patchUserThunkConnect(userData);
 

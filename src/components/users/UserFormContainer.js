@@ -14,24 +14,35 @@ const UserFormContainer = ({ sendForm, user }) => {
     setUserModel(initialValues(user));
   }, [user]);
 
-  const { state: apiCallState, apiCall } = useApiCall(async () =>
-    sendForm(userModel)
+  const { state: apiCallState, execute: executeApiCall } = useApiCall(
+    sendForm,
+    [userModel],
+    { executeOnMount: false }
   );
 
   const onSubmit = async event => {
     event.preventDefault();
-    apiCall();
+    executeApiCall();
   };
 
   const onChangeName = event => {
-    setUserModel({ email: userModel.email, first_name: event.target.value });
+    const {
+      target: { value }
+    } = event;
+    setUserModel(prevUserModel => ({
+      ...prevUserModel,
+      first_name: value
+    }));
   };
 
   const onChangeEmail = event => {
-    setUserModel({
-      first_name: userModel.first_name,
-      email: event.target.value
-    });
+    const {
+      target: { value }
+    } = event;
+    setUserModel(prevUserModel => ({
+      ...prevUserModel,
+      email: value
+    }));
   };
   return (
     <UserForm
