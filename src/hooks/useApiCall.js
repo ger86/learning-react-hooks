@@ -18,7 +18,7 @@ type Options = {
 
 type Action = {
   type: string,
-  error ?: {},
+  error?: {},
   result?: {}
 };
 
