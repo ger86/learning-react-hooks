@@ -1,1 +1,3 @@
-export default a => Array.from(new Set(a));
+// @flow
+export default (array: Array<mixed>): Array<mixed> =>
+  Array.from(new Set(array));

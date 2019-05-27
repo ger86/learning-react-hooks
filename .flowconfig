@@ -1,0 +1,16 @@
+[ignore]
+.*node_modules/.*
+.*public/.*
+
+[include]
+
+[libs]
+./type-def-libs
+
+[lints]
+
+[options]
+module.system.node.resolve_dirname=node_modules
+module.system.node.resolve_dirname=./src
+
+[strict]

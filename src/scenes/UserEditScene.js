@@ -1,13 +1,10 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
+import type { ReactRouterMatchType } from 'types/reactRouterMatchType';
 import UserEditContainer from 'components/users/UserEditContainer';
 
-const UserEditScene = ({ match }) => (
+const UserEditScene = ({ match }: { match: ReactRouterMatchType }) => (
   <UserEditContainer userId={match.params.id} />
 );
-
-UserEditScene.propTypes = {
-  match: PropTypes.object.isRequired
-};
 
 export default UserEditScene;

@@ -1,10 +1,13 @@
+// @flow
 import queryString from 'query-string';
 import { API_URL } from 'config/consts';
 import ApiError from 'utils/ApiError';
 
 function Request() {}
 
-Request.prototype.handleResponse = async function handleResponse(response) {
+Request.prototype.handleResponse = async function handleResponse(
+  response: Response
+) {
   const responseJson = await response.json();
   if (response.ok) {
     return responseJson;
@@ -14,10 +17,10 @@ Request.prototype.handleResponse = async function handleResponse(response) {
 };
 
 Request.prototype.sendRequest = async function sendRequest(
-  method,
-  path,
-  query,
-  body
+  method: string,
+  path: string,
+  query: {},
+  body: {}
 ) {
   let url = `${API_URL}/${path}`;
   if (query) {
@@ -37,15 +40,15 @@ Request.prototype.sendRequest = async function sendRequest(
   return this.handleResponse(response);
 };
 
-Request.prototype.get = async function get(path, query) {
+Request.prototype.get = async function get(path: string, query: ?{}) {
   return this.sendRequest('GET', path, query);
 };
 
-Request.prototype.post = async function post(path, data) {
+Request.prototype.post = async function post(path: string, data: {}) {
   return this.sendRequest('POST', path, null, data);
 };
 
-Request.prototype.patch = async function patch(path, data) {
+Request.prototype.patch = async function patch(path: string, data: {}) {
   return this.sendRequest('PATCH', path, null, data);
 };
 

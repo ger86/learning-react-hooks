@@ -1,4 +1,6 @@
-function ApiError(code, message) {
+// @flow
+
+function ApiError(code: number, message: string) {
   this.name = 'ApiError';
   this.message = message || 'Default Message';
   this.code = code;

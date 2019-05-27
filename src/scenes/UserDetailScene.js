@@ -1,13 +1,10 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
+import type { ReactRouterMatchType } from 'types/reactRouterMatchType';
 import UserDetailContainer from 'components/users/UserDetailContainer';
 
-const UserDetailScene = ({ match }) => {
+const UserDetailScene = ({ match }: { match: ReactRouterMatchType }) => {
   return <UserDetailContainer userId={match.params.id} />;
-};
-
-UserDetailScene.propTypes = {
-  match: PropTypes.object.isRequired
 };
 
 export default UserDetailScene;
